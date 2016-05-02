@@ -87,15 +87,13 @@ var AppView = Backbone.View.extend({
   },
 
   notLoggedIn: function() {
+    var current = appModel.get('current_user').get('username');
     
-    if (appModel.get('current_user').get('username') === '') {
-      console.log("false");
-    } else {
+    if (current != '') {
       $('.edit').removeClass('hide');
-      console.log("true");
       $('.remove').removeClass('hide');
       $('.add-review').removeClass('hide');
-    }
+    } 
 
   },
 
