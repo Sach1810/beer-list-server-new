@@ -143,6 +143,16 @@ passport.use('register', new LocalStrategy(function (username, password, done) {
   });
 }));
 
+passport.use('login', new LocalStrategy(function (username, password, done) {
+  User.findOne({ username: username, password: password }, function (err, user) {
+    if (err) { return done(err); }
+    if (!user) { return done(null, false); }
+
+    return done(null, user);
+  });
+}));
+
+
 app.post('/register', passport.authenticate('register'), function (req, res) {
   res.json(req.user);
 }); 
@@ -155,6 +165,10 @@ app.get('/currentUser', function (req, res) {
 app.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
+});
+
+app.post('/login', passport.authenticate('login'), function(req, res) {
+  res.redirect('/')
 });
 
 app.listen(8000);
