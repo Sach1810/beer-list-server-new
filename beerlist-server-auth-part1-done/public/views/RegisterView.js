@@ -15,6 +15,7 @@ var RegisterView = Backbone.View.extend({
 
     user.save({}, { 
       success: function (user) {
+        this.appModel.set('current_user', user) ;
         alert(user.get('username') +  ' is successfully registered');
         beerRouter.navigate('/' , true);
       },
@@ -22,4 +23,8 @@ var RegisterView = Backbone.View.extend({
       }
     });
   }
+
 });
+
+
+// get app modues current user and set it
