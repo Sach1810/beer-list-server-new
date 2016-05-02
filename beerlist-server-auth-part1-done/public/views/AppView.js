@@ -17,6 +17,7 @@ var AppView = Backbone.View.extend({
     this.$reviewsContainer = this.$('.reviews-container');
 
     this.$registerContainer = this.$('.register-container');
+    this.$loginContainer = this.$('.login-container');
 
     this.listenTo(this.model.get('beers'), 'add', this.addBeer);
     this.listenTo(this.model.get('beers'), 'reset', this.renderBeers);
@@ -33,7 +34,8 @@ var AppView = Backbone.View.extend({
     var viewMap = {
       'beers': this.$beersContainer,
       'reviews': this.$reviewsContainer,
-      'register': this.$registerContainer
+      'register': this.$registerContainer,
+      'login': this.$loginContainer
     };
 
     // remove the show class from all the 'view' elements
