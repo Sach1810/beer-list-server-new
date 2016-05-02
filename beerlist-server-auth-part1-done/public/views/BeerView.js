@@ -13,7 +13,7 @@ var BeerView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, 'destroy', this.remove);
     this.listenTo(this.model, 'change:edit_mode', this.renderEdit);
-    this.listenTo(this.model, 'change:name', this.render);
+    this.listenTo(this.model, 'change:name', this.render); 
   },
 
   toggleEditMode: function () {
@@ -56,8 +56,9 @@ var BeerView = Backbone.View.extend({
   render: function () {
     this.$el.html(this.template(this.model.toJSON()));
 
-    this.$nameInput = this.$('.edit-mode');
+    this.$nameInput = this.$('.edit-mode'); 
 
     return this;
-  }
-})
+  },
+
+});

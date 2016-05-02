@@ -121,8 +121,8 @@
       <input class="beer-name edit-mode" value="{{name}}">
       <p>{{style}} - {{abv}}% ABV</p>
     </div>
-    <i class="fa fa-times remove"></i>
-    <i class="fa fa-pencil-square-o edit"></i>
+    <i class="fa fa-times remove hide"></i>
+    <i class="fa fa-pencil-square-o edit hide"></i>
   </script>
 
   <script id="beer-detail-template" type="text/x-handlebars-template">
@@ -136,16 +136,13 @@
       <p>{{style}} - {{abv}}% ABV</p>
 
       <div class="reviews-list"></div>
-
-      <div class="form-group">
-        <label>User Name</label>
-        <input type="text" class="form-control" id="review-name-input" placeholder="name">
+      <div class="add-review hide">
+        <div class="form-group">
+          <label>Review Notes</label>
+          <input type="text" class="form-control" id="review-notes-input" placeholder="notes">
+        </div>
+        <button class="btn btn-primary submit-review">submit</button>
       </div>
-      <div class="form-group">
-        <label>Review Notes</label>
-        <input type="text" class="form-control" id="review-notes-input" placeholder="notes">
-      </div>
-      <button class="btn btn-primary submit-review">submit</button>
     </div>
   </script>
 
@@ -153,7 +150,7 @@
     <div class="content-container">
       <span class="review-name">{{name}} - </span>
       <span class="reviews-notes">{{text}}</span>
-      <i class="fa fa-times remove"></i>
+      <i class="fa fa-times remove hide"></i>
     </div>
   </script>
 

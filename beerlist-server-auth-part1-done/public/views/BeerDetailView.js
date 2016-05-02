@@ -14,9 +14,10 @@ var BeerDetailView = Backbone.View.extend({
 
   createReview: function () {
     this.model.get('reviews').create({
-      name: this.$nameInput.val(),
+      name: appModel.get('current_user').get('username'),
       text: this.$notesInput.val(),
     }, {wait: true});
+    $('#review-notes-input').val("");
   },
 
   addReview: function (review) {

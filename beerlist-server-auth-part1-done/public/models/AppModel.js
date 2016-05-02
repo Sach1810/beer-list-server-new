@@ -19,6 +19,8 @@ var AppModel = Backbone.Model.extend({
 
   initialize: function () {
     this.on('change:current_beer', this._setReviewsUrl);
+
+    // this.notLoggedIn();
   },
 
   _setReviewsUrl: function () {
@@ -27,5 +29,6 @@ var AppModel = Backbone.Model.extend({
 
     beer.get('reviews').url = '/beers/' + id + '/reviews';
   }
+
 
 });

@@ -31,6 +31,8 @@ var AppView = Backbone.View.extend({
     this.navView = null;
 
     this.renderNav();
+        // this.on('change:current_user', this.notLoggedIn);
+
   },
 
   renderView: function () {
@@ -59,6 +61,7 @@ var AppView = Backbone.View.extend({
     this.detailView = new BeerDetailView({ model: this.model.get('current_beer')});
   
     this.$reviewsContainer.append(this.detailView.render().el);
+    this.notLoggedIn();
   },
 
   createBeer: function () {
@@ -73,12 +76,27 @@ var AppView = Backbone.View.extend({
   addBeer: function (beer) {
     var beerView = new BeerView({ model: beer });
     this.$beerList.append(beerView.render().el);
+    this.notLoggedIn();
   },
 
   renderBeers: function () {
     this.model.get('beers').each(function (m) {
       this.addBeer(m);
     }, this);
+    
+  },
+
+  notLoggedIn: function() {
+    
+    if (appModel.get('current_user').get('username') === '') {
+      console.log("false");
+    } else {
+      $('.edit').removeClass('hide');
+      console.log("true");
+      $('.remove').removeClass('hide');
+      $('.add-review').removeClass('hide');
+    }
+
   },
 
   renderNav: function () {
@@ -90,4 +108,7 @@ var AppView = Backbone.View.extend({
   
     this.$navContainer.append(this.navView.render().el);
   }
+
+
+
 });
