@@ -6,6 +6,8 @@ var registerView = new RegisterView();
 
 var beerRouter = new BeerRouter();
 
+appModel.fetch();
+
 appModel.get('beers').fetch({success: function () {
   Backbone.history.start();
 }}, {reset: true});

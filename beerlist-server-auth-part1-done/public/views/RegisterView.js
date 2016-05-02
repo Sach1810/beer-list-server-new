@@ -19,8 +19,6 @@ var RegisterView = Backbone.View.extend({
         beerRouter.navigate('/' , true);
       },
       error : function (user, response) {
-        console.log(user);
-        console.log(response);
       }
     });
   }

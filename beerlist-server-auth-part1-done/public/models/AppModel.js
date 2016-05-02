@@ -2,13 +2,20 @@ var AppModel = Backbone.Model.extend({
   defaults: function () {
     return {
       beers: new BeersCollection(),
-
+      current_user: new UserModel(),
       current_beer: null,
-
-      // set to a string of whatever view is currenlty being displayed
       view: 'beers'
     }
   },
+
+  parse: function (response) {
+        if (response) {
+          var user = new UserModel(response);
+          this.set('current_user', user);
+        }
+  },
+
+  url: '/currentUser',
 
   initialize: function () {
     this.on('change:current_beer', this._setReviewsUrl);
@@ -20,4 +27,5 @@ var AppModel = Backbone.Model.extend({
 
     beer.get('reviews').url = '/beers/' + id + '/reviews';
   }
+
 });

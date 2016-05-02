@@ -23,9 +23,8 @@ var BeerView = Backbone.View.extend({
   },
 
   removeBeer: function () {
-    this.model.destroy({ success: function(model, response) {
-      console.log(model);
-      console.log(response);
+    this.model.destroy({wait: true},{ success: function(model, response) {
+
     }});
   },
 
@@ -46,11 +45,12 @@ var BeerView = Backbone.View.extend({
 
     if (!this.model.get('edit_mode')) {
       return;
+    } else {
+      this.model.set('edit_mode', false);
     }
 
-    this.model.set('name', value);
-    this.model.set('edit_mode', false);
-    this.model.save();
+
+    this.model.save({ name: value }, { wait: true });
   },
 
   render: function () {

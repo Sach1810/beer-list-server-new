@@ -15,9 +15,9 @@ var AppView = Backbone.View.extend({
 
     this.$beersContainer = this.$('.beers-container');
     this.$reviewsContainer = this.$('.reviews-container');
-
     this.$registerContainer = this.$('.register-container');
     this.$loginContainer = this.$('.login-container');
+    this.$navContainer = this.$('.nav-container');
 
     this.listenTo(this.model.get('beers'), 'add', this.addBeer);
     this.listenTo(this.model.get('beers'), 'reset', this.renderBeers);
@@ -25,7 +25,12 @@ var AppView = Backbone.View.extend({
     this.listenTo(this.model, 'change:view', this.renderView);
     this.listenTo(this.model, 'change:current_beer', this.renderDetailView);
 
+    this.listenTo(this.model, 'change:current_user', this.renderNav);
+
     this.detailView = null;
+    this.navView = null;
+
+    this.renderNav();
   },
 
   renderView: function () {
@@ -74,5 +79,15 @@ var AppView = Backbone.View.extend({
     this.model.get('beers').each(function (m) {
       this.addBeer(m);
     }, this);
+  },
+
+  renderNav: function () {
+    if (this.navView) {
+      this.navView.remove();
+    }
+
+    this.navView = new NavView({ model: this.model.get('current_user') || new UserModel()});
+  
+    this.$navContainer.append(this.navView.render().el);
   }
 });

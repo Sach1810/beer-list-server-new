@@ -27,13 +27,23 @@ app.use(passport.initialize());
 app.use(passport.session());
 //------------------------
 
+// Define a middleware function to be used for every secured routes
+// Pass this 'auth' route to all functions that we want to make sure that the user is authenticated to perform
+var auth = function(req, res, next){
+  if (!req.isAuthenticated()) 
+    res.send(401);
+  else
+    next();
+};
+
+
 app.get('/beers', function (req, res) {
   Beer.find(function (error, beers) {
     res.send(beers);
   });
 });
 
-app.post('/beers', function (req, res, next) {
+app.post('/beers', auth, function (req, res, next) {
   var beer = new Beer(req.body);
 
   beer.save(function(err, beer) {
@@ -43,7 +53,7 @@ app.post('/beers', function (req, res, next) {
   });
 });
 
-app.put('/beers/:id',  function(req, res, next) {
+app.put('/beers/:id', auth, function(req, res, next) {
   Beer.findById(req.params.id, function (error, beer) {
     beer.name = req.body.name;
 
@@ -55,7 +65,7 @@ app.put('/beers/:id',  function(req, res, next) {
   });
 });
 
-app.delete('/beers/:id', function (req, res) {
+app.delete('/beers/:id', auth, function (req, res) {
   Beer.findById(req.params.id, function (error, beer) {
     if (error) {
       res.status(500);
@@ -68,7 +78,7 @@ app.delete('/beers/:id', function (req, res) {
   });
 });
 
-app.post('/beers/:id/reviews', function(req, res, next) {
+app.post('/beers/:id/reviews', auth, function(req, res, next) {
   Beer.findById(req.params.id, function(err, beer) {
     if (err) { return next(err); }
 
@@ -84,7 +94,7 @@ app.post('/beers/:id/reviews', function(req, res, next) {
   });
 });
 
-app.delete('/beers/:beer/reviews/:review', function(req, res, next) {
+app.delete('/beers/:beer/reviews/:review', auth, function(req, res, next) {
   Beer.findById(req.params.beer, function (err, beer) {
     for (var i = 0; i < beer.reviews.length; i ++) {
       if (beer.reviews[i]["_id"] == req.params.review) {
@@ -125,7 +135,7 @@ passport.use('register', new LocalStrategy(function (username, password, done) {
       // create the user
       var newUser = new User();
 
-      // set the user's local credentialsw
+      // set the user's local credentials
       newUser.username = username;
       newUser.password = password;    // Note: Should create a hash out of this plain password!
 
@@ -136,36 +146,38 @@ passport.use('register', new LocalStrategy(function (username, password, done) {
           throw err;
         }
 
-        console.log('User Registration succesful');
+        console.log('User Registration successful');
         return done(null, newUser);
       });
     }
   });
 }));
 
-passport.use('login', new LocalStrategy(function (username, password, done) {
-  User.findOne({ username: username, password: password }, function (err, user) {
-    if (err) { return done(err); }
-    if (!user) { return done(null, false); }
-
-    return done(null, user);
-  });
-}));
-
-
 app.post('/register', passport.authenticate('register'), function (req, res) {
   res.json(req.user);
-}); 
+});
 
 // send the current user back!
 app.get('/currentUser', function (req, res) {
   res.send(req.user);
 });
+// anytime we need to get the current user we can do a GET request to this route!
 
-app.get('/logout', function (req, res) {
+// The below logs us out from the server
+app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
+
+passport.use('login', new LocalStrategy(function (username, password, done) {
+  User.findOne({ 'username': username, 'password': password}, function (err, user) {
+    // In case of any error return
+    if (err) { return done(err)}; 
+    if (!user) { return done (null, false); }
+    return done (null, user);
+  });
+}));
+
 
 app.post('/login', passport.authenticate('login'), function(req, res) {
   res.redirect('/')
